@@ -1,0 +1,37 @@
+services:
+  nginx-service:
+    image: nginx:stable-alpine
+    container_name: nginx-container
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app:/var/www/project
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php-service
+      - redis-service
+    networks:
+      - nginx-php-redis
+  php-service:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: php-container
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./app:/var/www/project
+    networks:
+      - nginx-php-redis
+  redis-service:
+    image: bitnami/redis:latest
+    container_name: redis-container
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_PORT_NUMBER=7000
+    networks:
+      - nginx-php-redis
+
+networks:
+  nginx-php-redis:
+    external: true
