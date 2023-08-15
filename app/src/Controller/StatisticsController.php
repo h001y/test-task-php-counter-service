@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Message\UpdateStatisticMessage;
+use App\Service\CacheService;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,20 +40,34 @@ class StatisticsController extends AbstractController
 
     public function get(): JsonResponse
     {
-        $statistics = [];
-
-        foreach ($this->slaveClient->keys('*') as $country) {
-            if (!$this->isValidCountryCode($country)) {
-                continue;
-            }
-            $statistics[$country] = (int)$this->slaveClient->get($country) ?? 0;
+        $cache = new CacheService(
+            $this->slaveClient,
+            $this->getParameter('kernel.cache_dir')
+        );
+        if ($cache->canUseFile()) {
+            return $this->json($cache->toArray());
         }
 
+        $statistics = $this->prepareData();
+        $cache->save($statistics);
+        $cache->refreshTs();
         return $this->json($statistics);
     }
 
     private function isValidCountryCode(string $countryCode): bool
     {
         return in_array($countryCode, Countries::getCountryCodes(), true);
+    }
+
+    private function prepareData(): array
+    {
+        $statistics = [];
+        foreach ($this->slaveClient->keys('*') as $country) {
+            if (!$this->isValidCountryCode($country)) {
+                continue;
+            }
+            $statistics[$country] = (int)$this->slaveClient->get($country) ?? 0;
+        }
+        return $statistics;
     }
 }

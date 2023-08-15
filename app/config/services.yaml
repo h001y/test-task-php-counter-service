@@ -8,7 +8,7 @@ parameters:
 services:
     # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
+        autowire: true # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     # makes classes in src/ available to be used as services
@@ -20,20 +20,21 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    Predis\ClientMaster:
+    app.redis_master:
+        class: Predis\Client
         arguments:
             - 'redis://redis-master'
 
-    Predis\ClientSlave:
+    app.redis_slave:
+        class: Predis\Client
         arguments:
             - 'redis://redis-slave'
 
     App\MessageHandler\UpdateStatisticHandler:
         arguments:
-            $masterClient: '@Predis\ClientMaster'
+            $masterClient: '@app.redis_master'
 
     App\Controller\StatisticsController:
         arguments:
-            $slaveClient: '@Predis\ClientSlave'
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+            $slaveClient: '@app.redis_slave'
+

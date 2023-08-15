@@ -14,11 +14,6 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class StatisticsControllerTest extends TestCase
 {
-    /**
-     * @throws InvalidDestinationException
-     * @throws InvalidMessageException
-     * @throws Exception
-     */
     public function testUpdate()
     {
         $countryCode = 'us';
