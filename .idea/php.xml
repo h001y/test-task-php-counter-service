@@ -98,6 +98,7 @@
       <path value="$PROJECT_DIR$/app/vendor/symfony/maker-bundle" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/process" />
       <path value="$PROJECT_DIR$/app/vendor/doctrine/inflector" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/redis-messenger" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />

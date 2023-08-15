@@ -6,12 +6,6 @@
 parameters:
 
 services:
-    Predis\Client:
-        arguments:
-            $parameters:
-                scheme: tcp
-                host: '%env(REDIS_HOST)%'
-                port: '%env(REDIS_PORT)%'
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -26,5 +20,20 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    Predis\ClientMaster:
+        arguments:
+            - 'redis://redis-master'
+
+    Predis\ClientSlave:
+        arguments:
+            - 'redis://redis-slave'
+
+    App\MessageHandler\UpdateStatisticHandler:
+        arguments:
+            $masterClient: '@Predis\ClientMaster'
+
+    App\Controller\StatisticsController:
+        arguments:
+            $slaveClient: '@Predis\ClientSlave'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

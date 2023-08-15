@@ -89,6 +89,7 @@
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/messenger" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/phpunit-bridge" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/process" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/redis-messenger" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

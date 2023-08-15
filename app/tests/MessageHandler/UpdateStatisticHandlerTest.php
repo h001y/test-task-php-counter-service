@@ -14,17 +14,17 @@ class UpdateStatisticHandlerTest extends TestCase
         $countryCode = 'us';
         $message = new UpdateStatisticMessage($countryCode);
 
-        $redisClient = $this->createMock(Client::class);
-        $redisClient->expects($this->once())
+        $masterClient = $this->createMock(Client::class);
+        $masterClient->expects($this->once())
             ->method('get')
             ->with($countryCode)
             ->willReturn(0);
 
-        $redisClient->expects($this->once())
+        $masterClient->expects($this->once())
             ->method('set')
             ->with($countryCode, 1);
 
-        $handler = new UpdateStatisticHandler($redisClient);
+        $handler = new UpdateStatisticHandler($masterClient);
         $handler($message);
     }
 }

@@ -4,9 +4,6 @@ namespace App\Controller;
 
 use App\Message\UpdateStatisticMessage;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Interop\Queue\Exception;
-use Interop\Queue\Exception\InvalidDestinationException;
-use Interop\Queue\Exception\InvalidMessageException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Intl\Countries;
@@ -14,27 +11,28 @@ use Predis\Client;
 
 class StatisticsController extends AbstractController
 {
-    private Client $redis;
+    private Client $slaveClient;
 
-    public function __construct(Client $redis)
+
+    public function __construct(Client $slaveClient)
     {
-        $this->redis = $redis;
+        $this->slaveClient = $slaveClient;
     }
 
     /**
-     * @throws InvalidDestinationException
-     * @throws InvalidMessageException
-     * @throws Exception
+     * @param string $country
+     * @param MessageBusInterface $messageBus
+     * @return JsonResponse
      */
     public function update(string $country, MessageBusInterface $messageBus): JsonResponse
     {
-        if (!$this->isValidCountryCode($country)) {
+        $countryCode = strtoupper($country);
+        if (!$this->isValidCountryCode($countryCode)) {
             return $this->json([
                 'message' => ' Wrong format for country for ' . $country,
                 ]);
         }
-        $message = new UpdateStatisticMessage($country);
-        $messageBus->dispatch($message);
+        $messageBus->dispatch(new UpdateStatisticMessage($countryCode));
 
         return $this->json(['message' => 'Update task added to queue']);
     }
@@ -43,12 +41,11 @@ class StatisticsController extends AbstractController
     {
         $statistics = [];
 
-        foreach ($this->redis->keys('*') as $country) {
+        foreach ($this->slaveClient->keys('*') as $country) {
             if (!$this->isValidCountryCode($country)) {
                 continue;
             }
-            $count = $this->redis->get($country) ?? 0;
-            $statistics[$country] = (int)$count;
+            $statistics[$country] = (int)$this->slaveClient->get($country) ?? 0;
         }
 
         return $this->json($statistics);
