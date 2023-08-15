@@ -24,44 +24,30 @@ services:
     networks:
       - nginx-php-redis
 
-# Редис мастер для записи
   redis-master:
-    image: bitnami/redis:latest
+    image: redis:5.0.0
     container_name: redis-master
     volumes:
-      - ./redis-data-master:/bitnami/redis/data
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_REPLICATION_MODE=master
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.redis-master == true
+      - ./redis-data-master:/data
     ports:
       - "6379:6379"
     networks:
       - nginx-php-redis
       - app-tier
 
-  # Редис слейв
   redis-slave:
-    image: bitnami/redis:latest
-    command: ["redis-server", "--slaveof", "redis-master", "6379", "--protected-mode", "no"]
+    image: redis:5.0.0
     container_name: redis-slave
     volumes:
-      - ./redis-data-slave:/bitnami/redis/data
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_REPLICATION_MODE=slave
-      - REDIS_MASTER_HOST=redis-master
+      - ./redis-data-slave:/data
     ports:
-      - "6479:6489"
+      - "6380:6379"
+    command: redis-server --slaveof redis-master 6379
+    depends_on:
+      - redis-master
     networks:
       - nginx-php-redis
       - app-tier
-    depends_on:
-      - redis-master
 
 networks:
   nginx-php-redis:

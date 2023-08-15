@@ -18,8 +18,6 @@ class UpdateStatisticHandler implements MessageHandlerInterface
     public function __invoke(UpdateStatisticMessage $message, array $stamps = []): void
     {
         $countryCode = $message->getCountryCode();
-        $count = $this->masterClient->get($countryCode) ?? 0;
-        $this->masterClient->set($countryCode, ++$count);
-//        $this->redisClient->incr($countryCode);
+        $this->masterClient->incr($countryCode);
     }
 }
