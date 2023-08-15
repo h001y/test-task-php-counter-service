@@ -82,6 +82,22 @@
       <path value="$PROJECT_DIR$/app/vendor/masterminds/html5" />
       <path value="$PROJECT_DIR$/app/vendor/sebastian/resource-operations" />
       <path value="$PROJECT_DIR$/app/vendor/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/app/vendor/ramsey/collection" />
+      <path value="$PROJECT_DIR$/app/vendor/ramsey/uuid" />
+      <path value="$PROJECT_DIR$/app/vendor/enqueue/dsn" />
+      <path value="$PROJECT_DIR$/app/vendor/enqueue/redis" />
+      <path value="$PROJECT_DIR$/app/vendor/queue-interop/queue-interop" />
+      <path value="$PROJECT_DIR$/app/vendor/brick/math" />
+      <path value="$PROJECT_DIR$/app/vendor/psr/clock" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/messenger" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/clock" />
+      <path value="$PROJECT_DIR$/app/vendor/enqueue/enqueue-bundle" />
+      <path value="$PROJECT_DIR$/app/vendor/enqueue/null" />
+      <path value="$PROJECT_DIR$/app/vendor/enqueue/enqueue" />
+      <path value="$PROJECT_DIR$/app/vendor/queue-interop/amqp-interop" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/maker-bundle" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/app/vendor/doctrine/inflector" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />
