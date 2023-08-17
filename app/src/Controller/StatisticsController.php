@@ -27,13 +27,13 @@ class StatisticsController extends AbstractController
      */
     public function update(string $country, MessageBusInterface $messageBus): JsonResponse
     {
-        $countryCode = strtoupper($country);
-        if (!$this->isValidCountryCode($countryCode)) {
+        $message = new UpdateStatisticMessage($country);
+        if (!$this->isValidCountryCode($message->getCountryCode())) {
             return $this->json([
                 'message' => ' Wrong format for country for ' . $country,
                 ]);
         }
-        $messageBus->dispatch(new UpdateStatisticMessage($countryCode));
+        $messageBus->dispatch($message);
 
         return $this->json(['message' => 'Update task added to queue']);
     }
@@ -49,9 +49,13 @@ class StatisticsController extends AbstractController
         }
 
         $statistics = json_decode($this->slaveClient->get('country_json'), true);
-        $cache->save($statistics);
-        $cache->refreshTs();
-        return $this->json($statistics);
+        if ($statistics) {
+            $cache->save($statistics);
+            $cache->refreshTs();
+            return $this->json($statistics);
+        }
+
+        return $this->json('No uploaded data .. yet');
     }
 
     private function isValidCountryCode(string $countryCode): bool

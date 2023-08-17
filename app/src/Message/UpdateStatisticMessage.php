@@ -13,6 +13,6 @@ class UpdateStatisticMessage
 
     public function getCountryCode(): string
     {
-        return $this->countryCode;
+        return strtoupper($this->countryCode);
     }
 }

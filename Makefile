@@ -16,5 +16,3 @@ create-redis-folders:
 	sudo chown 1001:1001 redis-data-slave
 install-deps: clean-redis-folders create-redis-folders
 	docker-compose build
-test:
-	docker-compose exec -it --user root php-container bash bin/phpunit

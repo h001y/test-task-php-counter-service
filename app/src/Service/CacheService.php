@@ -17,7 +17,6 @@ class CacheService
     }
     public function save(array $data): bool
     {
-
         return (bool) file_put_contents($this->getFilepath(), json_encode($data));
     }
 

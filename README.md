@@ -9,9 +9,6 @@
 ### Поднятие уже существующих контейнеров
 ### make up
 
-### Запуск unit-тестов
-### make test
-
 ### Очистка папок redis-slave, redis-master
 ### make clean-redis-folders
 
@@ -35,9 +32,6 @@
 ## Another commands
 ### Raising existing containers
 ### make up
-
-### Run unit-тестов
-### make test
 
 ### Delete folders redis-slave, redis-master
 ### make clean-redis-folders
