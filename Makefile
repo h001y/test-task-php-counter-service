@@ -3,8 +3,7 @@ up:
 php-cli:
 	 docker exec -it php-container bash
 build: clean-redis-folders create-redis-folders install-deps up
-	docker-compose exec -it --user root php-container composer install
-	echo "Build finished"
+	docker-compose run php-service composer install
 stop:
 	docker-compose stop
 clean-redis-folders:
