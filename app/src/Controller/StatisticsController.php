@@ -48,7 +48,7 @@ class StatisticsController extends AbstractController
             return $this->json($cache->toArray());
         }
 
-        $statistics = $this->prepareData();
+        $statistics = json_decode($this->slaveClient->get('country_json'), true);
         $cache->save($statistics);
         $cache->refreshTs();
         return $this->json($statistics);
@@ -57,17 +57,5 @@ class StatisticsController extends AbstractController
     private function isValidCountryCode(string $countryCode): bool
     {
         return in_array($countryCode, Countries::getCountryCodes(), true);
-    }
-
-    private function prepareData(): array
-    {
-        $statistics = [];
-        foreach ($this->slaveClient->keys('*') as $country) {
-            if (!$this->isValidCountryCode($country)) {
-                continue;
-            }
-            $statistics[$country] = (int)$this->slaveClient->get($country) ?? 0;
-        }
-        return $statistics;
     }
 }

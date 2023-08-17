@@ -25,7 +25,7 @@ services:
       - nginx-php-redis
 
   redis-master:
-    image: redis:5.0.0
+    image: redis:latest
     container_name: redis-master
     volumes:
       - ./redis-data-master:/data
@@ -36,7 +36,7 @@ services:
       - app-tier
 
   redis-slave:
-    image: redis:5.0.0
+    image: redis:latest
     container_name: redis-slave
     volumes:
       - ./redis-data-slave:/data
@@ -51,6 +51,5 @@ services:
 
 networks:
   nginx-php-redis:
-    external: true
   app-tier:
     driver: bridge

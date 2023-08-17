@@ -29,9 +29,6 @@ class CacheService
     public function toArray(): array
     {
         $fileContents = file_get_contents($this->getFilepath());
-        $a = json_decode($fileContents, true);
-        var_dump($a);
-        die();
         return json_decode($fileContents, true);
     }
 
